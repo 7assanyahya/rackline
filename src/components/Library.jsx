@@ -1,3 +1,5 @@
+import Credits from './Credits.jsx';
+
 export default function Library() {
   return (
     <aside className="pane lib sheet" id="libSheet" aria-label="Device library">
@@ -9,6 +11,7 @@ export default function Library() {
       </div>
       <div className="lib-list" id="libList" />
       <p className="lib-note">Drag a device into the rack, or tap it to drop it in the highest free slot. Drawn as generic models; specs are typical values for planning.</p>
+      <Credits className="credits lib-credits" />
     </aside>
   );
 }

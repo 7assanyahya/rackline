@@ -34,6 +34,9 @@ export const AR = {
   'Show or hide labels': 'إظهار أو إخفاء الملصقات', 'Auto manage cables': 'ترتيب الكابلات تلقائيًا', 'Backup or restore': 'نسخ احتياطي أو استعادة',
   'Rack size': 'حجم الرف', 'Units': 'الوحدات', 'Metric': 'متري', 'US': 'أمريكي', 'mm, kg, 230 V': 'مم، كغ، 230 فولت', 'inches, lb, 120 V': 'بوصة، رطل، 120 فولت',
 
+  // credits
+  'By': 'بواسطة', 'Made by': 'من تطوير', 'Rackline is made by': 'Rackline من تطوير', 'Rackline is free and open source.': 'Rackline مجاني ومفتوح المصدر.', 'Instagram': 'إنستغرام',
+
   // library
   'Device library': 'مكتبة الأجهزة', 'Search: PC, router, NAS, switch, XLR…': 'ابحث: كمبيوتر، راوتر، NAS، سويتش، XLR…',
   'All': 'الكل', 'Home & DIY': 'المنزل وصنعها بنفسك', 'My devices': 'أجهزتي', 'Audio': 'صوت', 'Video': 'فيديو', 'Lighting': 'إضاءة',
