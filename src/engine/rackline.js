@@ -708,7 +708,7 @@ function renderStage(){
   if(v==='site')c.querySelectorAll(`.bay[data-rack="${r.id}"]`).forEach(b=>b.closest('.case').classList.add('activecase'));
   if(rackView) c.insertAdjacentHTML('beforeend','<svg class="cables wires" aria-label="Cables"></svg>');
   document.querySelectorAll('[data-view]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.view===v));
-  {const OV={both:'Front + back',side:'Side',site:'Site',report:'Report'},lb=$('#viewMoreLbl'),vm=$('#viewMore');if(lb)lb.textContent=OV[v]||'More';if(vm)vm.setAttribute('aria-pressed',String(!!OV[v]))}
+  {const OV={both:'Both',side:'Side',site:'Site',report:'Report'},lb=$('#viewMoreLbl'),vm=$('#viewMore');if(lb)lb.textContent=OV[v]||'More';if(vm)vm.setAttribute('aria-pressed',String(!!OV[v]))}
   document.body.classList.toggle('is3dview',v==='3d');
   document.querySelectorAll('#modes button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.mode===state.mode));
   $('#snapWrap').hidden=state.mode!=='free';
