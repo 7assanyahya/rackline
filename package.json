@@ -4,7 +4,10 @@
   "version": "1.0.0",
   "description": "Rack planner for home labs, studios, gaming, security and touring A/V, with 2D and 3D views.",
   "license": "MIT",
-  "author": "Hassan Yahya",
+  "author": {
+    "name": "Hassan Yahya",
+    "url": "https://www.instagram.com/v3h3/"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/7assanyahya/rackline.git"

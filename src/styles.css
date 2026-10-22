@@ -775,3 +775,16 @@ td.n{font-family:var(--f-num)}
   [dir=rtl] .t3-bottom{left:auto;right:10px}
   [dir=rtl] .sheethead .textbtn{justify-self:start}
 }
+
+/* ---------- credits ---------- */
+.credits{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:4px 6px;margin:0;font-size:12px;color:var(--muted)}
+.credits b{color:var(--ink);font-weight:600}
+.credits a{display:inline-flex;align-items:center;gap:4px;color:var(--accent);text-decoration:none;font-weight:600;padding:3px 9px;border-radius:99px;background:var(--accent-soft)}
+.credits a:hover{background:color-mix(in srgb,var(--accent) 22%,transparent)}
+.credits a .ico{width:14px;height:14px}
+.lib-credits{margin-top:auto;padding:12px 14px calc(14px + env(safe-area-inset-bottom,0px));border-top:.5px solid var(--sep);position:sticky;bottom:0;background:var(--panel)}
+.help-credits{justify-content:flex-start;padding-top:10px;border-top:.5px solid var(--sep)}
+.sheet-credits{padding-bottom:8px}
+.group a.row{text-decoration:none}
+.tintval{color:var(--accent)!important;font-weight:500}
+@media (max-width:760px){.lib-credits{display:none}}

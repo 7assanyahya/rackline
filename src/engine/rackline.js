@@ -1205,7 +1205,8 @@ function openHelp(){
     <li><b>Front &amp; back:</b> devices can be mounted on the back rails too. Shallow gear like patch panels often goes there.</li>
     <li><b>Share the plan:</b> the Report view lists every device, label and patch port, ready to copy.</li>
     <li>Shortcuts: <kbd>Ctrl</kbd>+<kbd>Z</kbd> undo · <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>Z</kbd> redo · <kbd>Ctrl</kbd>+<kbd>D</kbd> duplicate · <kbd>Delete</kbd> remove · <kbd>Esc</kbd> deselect</li>
-  </ol>`);
+  </ol>
+  <p class="credits help-credits"><span>Rackline is made by</span> <b data-notr dir="ltr">Hassan Yahya</b> <a href="https://www.instagram.com/v3h3/" target="_blank" rel="noopener noreferrer" data-notr>${I('instagram','ico sm')}<span dir="ltr">@v3h3</span></a></p>`);
 }
 
 /* custom device maker */

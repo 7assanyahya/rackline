@@ -9,6 +9,8 @@
   <a href="CONTRIBUTING.md"><img alt="PRs welcome" src="https://img.shields.io/badge/PRs-welcome-2f9e57"></a>
 </p>
 
+<p align="center">By <b>Hassan Yahya</b> · <a href="https://www.instagram.com/v3h3/">@v3h3</a></p>
+
 <p align="center"><b>English</b> · <a href="README.ar.md">العربية</a></p>
 
 Rackline is a rack planner that runs in your browser. Use it to lay out a home lab, studio, gaming setup, security cabinet, small office or touring A/V rig: place devices, wire them up, and check that everything fits before you build it.
@@ -111,6 +113,12 @@ Projects are saved in your browser's local storage on the device you're using. N
 Rackline is open source, and contributions are welcome: new devices, translations, bug fixes and design ideas. Read [CONTRIBUTING.md](CONTRIBUTING.md) to get started. You can also ask for a device with the **Device request** issue template.
 
 Please follow the [Code of Conduct](CODE_OF_CONDUCT.md). To report a security problem privately, see [SECURITY.md](SECURITY.md).
+
+## Credits
+
+Rackline is designed and built by **Hassan Yahya**. Follow on Instagram: [@v3h3](https://www.instagram.com/v3h3/).
+
+Thanks to everyone who contributes devices, translations and fixes.
 
 ## License
 

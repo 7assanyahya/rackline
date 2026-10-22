@@ -1,5 +1,6 @@
 import Icon from './Icon.jsx';
 import { getLang, setLang } from '../i18n.js';
+import { AUTHOR, INSTAGRAM, INSTAGRAM_URL } from './Credits.jsx';
 
 const MORE = [
   { proxy: '#tapeToggle', label: 'Show or hide labels' },
@@ -55,6 +56,13 @@ export default function PhoneChrome() {
           <div className="group">
             <button className="row rowbtn tint" data-proxy="#newBtn">New project</button>
           </div>
+          <div className="group">
+            <div className="row"><span>Made by</span><span className="rowval" data-notr="" dir="ltr">{AUTHOR}</span></div>
+            <a className="row rowbtn" href={INSTAGRAM_URL} target="_blank" rel="noopener noreferrer">
+              <span>Instagram</span><span className="rowval tintval" data-notr="" dir="ltr">@{INSTAGRAM}</span>
+            </a>
+          </div>
+          <p className="credits sheet-credits"><span>Rackline is free and open source.</span></p>
         </div>
       </div>
       <div id="sheetBack" data-closesheet="" hidden />
