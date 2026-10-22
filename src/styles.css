@@ -635,6 +635,7 @@ td.n{font-family:var(--f-num)}
 .t3-top{position:absolute;top:12px;left:12px;z-index:3}
 .t3-bottom{position:absolute;left:50%;bottom:14px;transform:translateX(-50%);z-index:3;max-width:calc(100% - 24px)}
 .t3-top .seg,.t3-bottom .seg{border-radius:12px;padding:3px}
+.t3-top .seg.mat,.t3-bottom .seg.mat{background:var(--mat)}
 .t3-top .seg button,.t3-bottom .seg button{padding:7px 14px;font-size:14px;border-radius:9px}
 .t3-side{position:absolute;right:12px;top:12px;z-index:3;display:flex;flex-direction:column;gap:10px}
 .fbtn{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;color:var(--ink);cursor:pointer;padding:0;transition:transform .12s,background .15s,color .15s}
@@ -744,6 +745,7 @@ td.n{font-family:var(--f-num)}
 /* fixes */
 .pop{background:var(--mat);-webkit-backdrop-filter:saturate(180%) blur(24px);backdrop-filter:saturate(180%) blur(24px);border:.5px solid var(--mat-line);box-shadow:0 14px 44px rgba(0,0,0,.2),0 1px 3px rgba(0,0,0,.1)}
 #viewMore{display:none}
+#viewMoreLbl{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
 .wl-icon{order:-1}
 @media (max-width:760px){
   #views #viewMore{display:inline-flex}
@@ -782,7 +784,7 @@ td.n{font-family:var(--f-num)}
 .credits a{display:inline-flex;align-items:center;gap:4px;color:var(--accent);text-decoration:none;font-weight:600;padding:3px 9px;border-radius:99px;background:var(--accent-soft)}
 .credits a:hover{background:color-mix(in srgb,var(--accent) 22%,transparent)}
 .credits a .ico{width:14px;height:14px}
-.lib-credits{margin-top:auto;padding:12px 14px calc(14px + env(safe-area-inset-bottom,0px));border-top:.5px solid var(--sep);position:sticky;bottom:0;background:var(--panel)}
+.lib-credits{z-index:2;margin-top:auto;padding:12px 14px calc(14px + env(safe-area-inset-bottom,0px));border-top:.5px solid var(--sep);position:sticky;bottom:0;background:var(--panel)}
 .help-credits{justify-content:flex-start;padding-top:10px;border-top:.5px solid var(--sep)}
 .sheet-credits{padding-bottom:8px}
 .group a.row{text-decoration:none}

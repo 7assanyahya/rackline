@@ -17,6 +17,27 @@ Rackline is a rack planner that runs in your browser. Use it to lay out a home l
 
 It's a free, open-source React app (MIT License). There's no server or account: everything runs in the browser, in English or Arabic.
 
+<p align="center"><img src="docs/screenshots/front.png" alt="Rackline showing the Home lab template in Front view, with the device library on the left and the selected home server's details on the right"></p>
+
+## Screenshots
+
+<table>
+  <tr>
+    <td width="50%"><img src="docs/screenshots/cables.png" alt="Front and back of a gaming rack side by side, with network, HDMI and power cables"><br><b>Front + back</b>: typed cables, colour-coded, routed through the side channels.</td>
+    <td width="50%"><img src="docs/screenshots/3d.png" alt="3D view of the gaming rack in Dim mode with a blue LED strip"><br><b>3D view</b>: orbit the rack, Dim the room and light it with LED strips.</td>
+  </tr>
+  <tr>
+    <td><img src="docs/screenshots/site.png" alt="Site view with two touring racks and the fiber and network links between them"><br><b>Site view</b>: every rack in the project and the links between them.</td>
+    <td><img src="docs/screenshots/dark.png" alt="Rear view of the home lab rack in dark mode"><br><b>Dark mode</b>: rear view, with each cable's other end labelled.</td>
+  </tr>
+  <tr>
+    <td colspan="2"><img src="docs/screenshots/arabic.png" alt="Rackline in Arabic with a right-to-left layout"><br><b>Arabic</b>: the whole interface switches to right-to-left, while rack drawings stay left-to-right.</td>
+  </tr>
+</table>
+
+<p align="center"><img src="docs/screenshots/phone.png" width="820" alt="Rackline on a phone: rack view, the Add a device sheet, and the 3D view"></p>
+<p align="center"><b>On a phone</b>: bottom toolbar, slide-up sheets and floating 3D controls.</p>
+
 ## Features
 
 **Building racks**
@@ -87,6 +108,7 @@ The repo is set up for Vercel (`vercel.json`: framework Vite, output `dist`).
 ```
 index.html              Page entry: meta tags, icons, fonts
 public/                 App icon (SVG + PNG sizes), web app manifest
+docs/screenshots/       Screenshots used in this README
 src/main.jsx            Mounts React
 src/App.jsx             App layout
 src/components/         TopBar, Library, Stage, Inspector, PhoneChrome, Logo, Icon
