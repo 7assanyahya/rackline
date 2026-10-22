@@ -1,8 +1,10 @@
+<p align="center"><img src="public/icon-192.png" width="96" height="96" alt="Rackline icon"></p>
+
 # Rackline
 
 Rackline is a rack planner that runs in your browser. Use it to lay out a home lab, studio, gaming setup, security cabinet, small office or touring A/V rig: place devices, wire them up, and check that everything fits before you build it.
 
-Everything is in one file, `index.html`. There's no build step, server or account.
+It's a React app built with Vite. There's no server or account: everything runs in the browser.
 
 ## Features
 
@@ -40,17 +42,48 @@ Home lab · Gaming & media · Home security · Network closet · Small office ·
 
 ## Run it locally
 
-Open `index.html` in a modern browser. That's all.
+You need Node.js 18 or newer.
 
-The 3D view loads three.js from a CDN the first time you open it, so it needs an internet connection then. Google Fonts are also loaded from the web. Everything else works offline.
+```bash
+npm install
+npm run dev
+```
+
+Then open the address it prints (usually http://localhost:5173).
+
+To make a production build and try it:
+
+```bash
+npm run build
+npm run preview
+```
+
+Google Fonts load from the web. three.js is bundled, and loads only when you open the 3D view.
 
 ## Deploy to Vercel
 
-```bash
-npx vercel --prod
+The repo is set up for Vercel (`vercel.json`: framework Vite, output `dist`).
+
+- **From the dashboard:** Add New → Project, then import this repo. The settings are filled in automatically, and every push to `main` redeploys.
+- **From the terminal:** run `npx vercel --prod` in the repo folder.
+
+## Project structure
+
+```
+index.html              Page entry: meta tags, icons, fonts
+public/                 App icon (SVG + PNG sizes), web app manifest
+src/main.jsx            Mounts React
+src/App.jsx             App layout
+src/components/         TopBar, Library, Stage, Inspector, PhoneChrome, Logo
+src/engine/rackline.js  Rack engine: devices, cables, 2D views, three.js 3D view
+src/styles.css          Styles, light and dark themes, phone layout
 ```
 
-Run this in the repo folder. Vercel serves `index.html` as a static site with no settings needed. If you import the repo in the Vercel dashboard instead, choose **Other** as the framework and leave the build command empty.
+React renders the page shell. The rack engine then draws the racks, faceplates, cables and 3D scene directly into it, which keeps dragging and wiring fast.
+
+## App icon
+
+The icon is an orange tile with a small rack holding three units and status LEDs. It comes as `public/favicon.svg`, a 32 px favicon, a 180 px Apple touch icon, 192 and 512 px app icons, and a 512 px maskable icon for Android home screens, all listed in `public/manifest.webmanifest`. You can add Rackline to a phone's home screen and it opens like an app.
 
 ## Where your data lives
 
@@ -59,4 +92,4 @@ Projects are saved in your browser's local storage on the device you're using. N
 ## Notes
 
 - Devices in the library are generic models with typical specs, for planning only. They aren't tied to any manufacturer or brand.
-- Libraries: [three.js r128](https://threejs.org/) with OrbitControls, loaded from cdnjs and jsDelivr.
+- Built with [React 18](https://react.dev/), [Vite](https://vitejs.dev/) and [three.js r128](https://threejs.org/) with OrbitControls.

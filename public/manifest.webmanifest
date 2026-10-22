@@ -1,0 +1,14 @@
+{
+  "name": "Rackline",
+  "short_name": "Rackline",
+  "description": "Plan racks for home labs, studios, gaming, security and touring A/V in 2D and 3D.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#14171a",
+  "theme_color": "#d9540b",
+  "icons": [
+    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
