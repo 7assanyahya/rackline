@@ -1,15 +1,24 @@
 <p align="center"><img src="public/icon-192.png" width="96" height="96" alt="Rackline icon"></p>
 
-# Rackline
+<h1 align="center">Rackline</h1>
+
+<p align="center">
+  <a href="LICENSE"><img alt="MIT License" src="https://img.shields.io/badge/license-MIT-ea5a0c"></a>
+  <a href="https://github.com/7assanyahya/rackline/actions/workflows/ci.yml"><img alt="Build" src="https://github.com/7assanyahya/rackline/actions/workflows/ci.yml/badge.svg"></a>
+  <img alt="Languages: English, Arabic" src="https://img.shields.io/badge/languages-English%20%7C%20%D8%A7%D9%84%D8%B9%D8%B1%D8%A8%D9%8A%D8%A9-4f5bd5">
+  <a href="CONTRIBUTING.md"><img alt="PRs welcome" src="https://img.shields.io/badge/PRs-welcome-2f9e57"></a>
+</p>
+
+<p align="center"><b>English</b> · <a href="README.ar.md">العربية</a></p>
 
 Rackline is a rack planner that runs in your browser. Use it to lay out a home lab, studio, gaming setup, security cabinet, small office or touring A/V rig: place devices, wire them up, and check that everything fits before you build it.
 
-It's a React app built with Vite. There's no server or account: everything runs in the browser.
+It's a free, open-source React app (MIT License). There's no server or account: everything runs in the browser, in English or Arabic.
 
 ## Features
 
 **Building racks**
-- A library of 65 devices: audio, video, lighting, network, power, utility, and a Home & DIY section (PCs, servers, NAS, Wi-Fi router, modem, PS5, PS4, NVRs, Raspberry Pis, keystone panels, UPS and more).
+- A library of 184 devices in nine categories: audio, video, lighting, network, servers & PCs, security, power, utility, and Home & DIY (PCs, NAS, Wi-Fi routers, modems, PS5, PS4, Xbox Series X, Nintendo Switch dock, Apple TV, AV receivers, NVRs, Raspberry Pis, UPS and more).
 - **Make your own device:** set the height, depth, weight, power and look, then add your own ports on the front and back, with a live preview.
 - **Custom patch panels** with up to 48 labelled ports (XLR, etherCON, RJ45, BNC, LC fiber, powerCON).
 - Devices can be mounted on the front rails or the back rails.
@@ -28,6 +37,9 @@ It's a React app built with Vite. There's no server or account: everything runs 
 - **3D view** (three.js): orbit around the road case, see every faceplate and back panel, watch cables run as 3D tubes, drag devices, and wire by tapping one port then another.
   - Lights on / Dim room modes, LED strips (seven colours or rainbow), and a working Rack Light device.
   - Spinning fans and an optional **Fan sound** that reacts to how many fans are in view.
+
+**Languages**
+- English and Arabic. Arabic switches the whole interface to right-to-left, while rack drawings stay left-to-right like the real hardware. Change language with the button in the top bar, or **More → Language** on a phone.
 
 **Planning**
 - Totals for space used, weight, power draw and current, in metric (230 V) or US units (120 V).
@@ -77,6 +89,9 @@ src/main.jsx            Mounts React
 src/App.jsx             App layout
 src/components/         TopBar, Library, Stage, Inspector, PhoneChrome, Logo, Icon
 src/icons.js            Line icons (SF Symbols style) shared by React and the engine
+src/i18n.js             Language support (English source text, translated as the page renders)
+src/i18n/ar.js          Arabic translation
+src/engine/devices-extra.js  Extended device library: the easiest place to contribute
 src/engine/rackline.js  Rack engine: devices, cables, 2D views, three.js 3D view
 src/styles.css          Styles, light and dark themes, phone layout
 ```
@@ -90,6 +105,16 @@ The icon is an orange tile with a small rack holding three units and status LEDs
 ## Where your data lives
 
 Projects are saved in your browser's local storage on the device you're using. Nothing is sent to a server. To move a project to another device or browser, use **Backup → Copy JSON**, then **Load pasted project** on the other one.
+
+## Contributing
+
+Rackline is open source, and contributions are welcome: new devices, translations, bug fixes and design ideas. Read [CONTRIBUTING.md](CONTRIBUTING.md) to get started. You can also ask for a device with the **Device request** issue template.
+
+Please follow the [Code of Conduct](CODE_OF_CONDUCT.md). To report a security problem privately, see [SECURITY.md](SECURITY.md).
+
+## License
+
+[MIT](LICENSE). You're free to use, change and share Rackline, including commercially, as long as you keep the copyright notice.
 
 ## Notes
 

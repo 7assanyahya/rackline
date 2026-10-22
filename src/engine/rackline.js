@@ -4,6 +4,7 @@
   App calls mountRackline() once to bring it to life.
 */
 import { svgIcon as I } from '../icons.js';
+import { EXTRA_DEVICES, EXTRA_CATS } from './devices-extra.js';
 
 let mounted = false;
 
@@ -16,6 +17,7 @@ const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&
 const uid=()=>Math.random().toString(36).slice(2,9);
 
 const CATS={home:{n:'Home & DIY',c:'--c-home'},mine:{n:'My devices',c:'--c-mine'},audio:{n:'Audio',c:'--c-audio'},video:{n:'Video',c:'--c-video'},light:{n:'Lighting',c:'--c-light'},net:{n:'Network',c:'--c-net'},power:{n:'Power',c:'--c-power'},util:{n:'Utility',c:'--c-util'}};
+{const o={};Object.entries(CATS).forEach(([k,v])=>{o[k]=v;if(k==='net'){o.compute=EXTRA_CATS.compute;o.secur=EXTRA_CATS.secur}});Object.keys(CATS).forEach(k=>delete CATS[k]);Object.assign(CATS,o)}
 const TAPES=[['#f2f0e9','White'],['#f4d03f','Yellow'],['#e8743b','Orange'],['#d64545','Red',1],['#3f9b5c','Green',1],['#3f72c9','Blue',1],['#7a52c7','Purple',1],['#222222','Black',1]];
 const DARK_TAPE=new Set(TAPES.filter(t=>t[2]).map(t=>t[0]));
 
@@ -129,6 +131,7 @@ const LIB=[
  {id:'lace',cat:'util',c:'',name:'Cable Lacing Bar',h:1,d:80,kg:.5,w:0,face:'black',open:1,front:[{t:'lace'}],rear:[{t:'lace'}]},
  {id:'lamp',cat:'util',c:'RL-1',name:'Rack Light',h:1,d:120,kg:1,w:10,face:'black',front:[{t:'logo'},{t:'gap'},{t:'knob'},{t:'pwr'}],rear:[{t:'iec'}]},
 ];
+EXTRA_DEVICES.forEach(d=>{if(!LIB.some(x=>x.id===d.id))LIB.push(d)});
 LIB.forEach(d=>{d.face=d.face||'black'});
 const LIBM=Object.fromEntries(LIB.map(d=>[d.id,d]));
 function syncCustom(){
@@ -193,7 +196,7 @@ function tplGaming(){
   const P=wrapProject('Gaming & Media Rack',[{id:uid(),name:'Media Center',units:18,depth:500,items:[jacks,plate,mk('brush',16),sw,hx,wifi,nas,ps5,ps4,tv,pw],cables}]);
   P.view='both';return P;
 }
-function tplEmpty(units){return wrapProject('My Rack',[{id:uid(),name:`${units}U Rack`,units,depth:600,items:[]}])}
+function tplEmpty(units){return wrapProject('My Rack',[{id:uid(),name:`${units}U Rack`,units,depth:units>=22?1000:600,items:[]}])}
 function tplSecurity(){
   const cams=['Front door','Driveway','Garage','Backyard','Side gate','Porch','Hallway','Shed','Spare','Spare','Spare','Spare','Spare','Spare','Spare','Spare'];
   const pp=mk('pp',12,{name:'CAMERAS',group:'Cameras',tape:'#2f9e57',panel:{n:16,type:'rj45',labels:cams}}),
@@ -514,7 +517,9 @@ const TYPE_COL={rj45:'#2f6fd6',ecn:'#2f6fd6',sfp:'#38b6d8',lc:'#38b6d8',hdmi:'#8
 function stubText(e){const f=findItem(e.item);if(!f)return 'to removed device';
   if(f.r.id!==state.active&&state.view!=='site')return esc(`to rack ${f.r.name}: ${label(f.it)}`);
   const atBack=visFace(f.it,'rear')===e.face;return esc(`to ${atBack?'back':'front'}: ${label(f.it)}`)}
-function drawCables(){
+let stubSpots=[];
+function stubBusy(B,right){if(stubSpots.some(p=>p.r===right&&Math.abs(p.y-B.y)<15&&Math.abs(p.x-B.x)<40))return true;stubSpots.push({x:B.x,y:B.y,r:right});return false}
+function drawCables(){stubSpots=[];
   const cv=$('#canvas'), svg=cv.querySelector('svg.wires'); if(!svg)return;
   const r=rack(),U=uPx(),cr=cv.getBoundingClientRect(),wire=state.mode==='wire';
   cv.querySelectorAll('.p.used').forEach(p=>p.classList.remove('used'));
@@ -563,7 +568,7 @@ function drawCables(){
       <path class="hit" d="${g.d}" fill="none" stroke="transparent" stroke-width="${Math.max(14,W+10)}"/>
       ${plug(A)}
       ${stub?`<path d="M${B.x} ${B.y-5} L${B.x+(stub.right?7:-7)} ${B.y} L${B.x} ${B.y+5} Z" fill="${col}" stroke="#000"/>
-        ${state.view==='site'||isPhone()?`<title>${stubText(stub.other)}</title>`:`<text x="${B.x+(stub.right?10:-10)}" y="${B.y+4}" text-anchor="${stub.right?'start':'end'}" font-family="IBM Plex Mono, monospace" font-size="11" fill="#fff" stroke="#111" stroke-width="3" paint-order="stroke">${stubText(stub.other)}</text>`}`
+        ${state.view==='site'||isPhone()||stubBusy(B,stub.right)?`<title>${stubText(stub.other)}</title>`:`<text x="${B.x+(stub.right?10:-10)}" y="${B.y+4}" text-anchor="${stub.right?'start':'end'}" font-family="IBM Plex Mono, monospace" font-size="11" fill="#fff" stroke="#111" stroke-width="3" paint-order="stroke">${stubText(stub.other)}</text>`}`
       :plug(B)}
       ${ci.T.brick&&!stub?`<rect x="${(g.mid.x-W*4.5).toFixed(1)}" y="${(g.mid.y-W*2.6).toFixed(1)}" width="${(W*9).toFixed(1)}" height="${(W*5.2).toFixed(1)}" rx="2" fill="#24272b" stroke="#000"/><rect x="${(g.mid.x-W*3).toFixed(1)}" y="${(g.mid.y-W*.6).toFixed(1)}" width="${(W*6).toFixed(1)}" height="${(W*1.2).toFixed(1)}" fill="#3a3f45"/>`:''}
       ${c.label&&!stub?`<text x="${g.mid.x}" y="${g.mid.y-W-(ci.T.brick?W*3:4)}" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="${Math.max(10,U*.26)}" fill="#fff" stroke="#111" stroke-width="3" paint-order="stroke">${esc(c.label)}</text>`:''}
@@ -696,7 +701,7 @@ function renderStage(){
   c.classList.toggle('free',state.mode==='free');
   c.classList.toggle('nocables',state.cables===false&&state.mode!=='wire');
   c.classList.toggle('is3d',v==='3d');
-  if(v==='3d'){if(!c.querySelector('#t3wrap'))c.innerHTML=T3.shellHTML();T3.show(c.querySelector('#t3wrap'))}
+  if(v==='3d'){if(!c.querySelector('#t3wrap'))c.innerHTML=T3.shellHTML();fit3D();T3.show(c.querySelector('#t3wrap'));requestAnimationFrame(fit3D)}
   else{T3.hide();
   c.innerHTML = v==='report'?reportHTML(): v==='side'?sideHTML(r): v==='both'?rackHTML(r,'front')+rackHTML(r,'rear'): v==='site'?state.racks.map(rk=>(state.siteFace||'both')==='both'?`<div class="sitepair">${rackHTML(rk,'front')}${rackHTML(rk,'rear')}</div>`:rackHTML(rk,state.siteFace)).join(''): rackHTML(r,v);
   }
@@ -718,6 +723,17 @@ function renderStage(){
     : 'Drag devices to move them · Arrow keys nudge the selected device · Delete removes · Ctrl+D duplicates';
   if(rackView) drawCables();
 }
+/* Size the 3D view to the space that is really left on screen */
+function fit3D(){
+  const w=document.getElementById('t3wrap');if(!w)return;
+  const r=w.getBoundingClientRect(),vh=window.innerHeight;let h;
+  if(isPhone()){const nav=document.querySelector('.bnav'),navH=nav?nav.getBoundingClientRect().height:0;h=vh-(r.top+window.scrollY)-navH-4}
+  else if(window.matchMedia('(max-width:1100px)').matches)h=Math.min(vh*.78,vh-r.top-16+window.scrollY);
+  else{const sr=$('#stage').getBoundingClientRect();h=sr.bottom-r.top-14}
+  w.style.flex='none';w.style.height=Math.max(320,Math.round(h))+'px';
+}
+window.addEventListener('resize',()=>{if(state.view==='3d')requestAnimationFrame(fit3D)});
+window.addEventListener('orientationchange',()=>setTimeout(fit3D,250));
 function swatches(cur){return `<div class="swatches">${TAPES.map(([c,n])=>`<button class="sw" data-tape="${c}" style="--s:${c}" aria-label="${n} tape" aria-pressed="${cur===c}" title="${n}"></button>`).join('')}</div>`}
 function renderInsp(){
   const r=rack(), s=stats(r), found=ui.sel&&findItem(ui.sel);
@@ -873,7 +889,7 @@ function placePop(el,anchor){
   const a=anchor.getBoundingClientRect(),vw=document.documentElement.clientWidth,vh=window.innerHeight,m=10;
   el.style.left='0px';el.style.top='0px';const w=el.offsetWidth,h=el.offsetHeight;
   let x,y;
-  if(anchor.closest('.t3-side')){x=a.left-w-10;y=a.top+a.height/2-h/2}
+  if(anchor.closest('.t3-side')){x=document.documentElement.dir==='rtl'?a.right+10:a.left-w-10;y=a.top+a.height/2-h/2}
   else{x=a.right-w;y=a.bottom+8;if(x<m)x=a.left}
   x=Math.max(m,Math.min(vw-w-m,x));y=Math.max(m,Math.min(vh-h-m,y));
   el.style.left=x+'px';el.style.top=y+'px';
@@ -1310,9 +1326,9 @@ const T3=(()=>{
   let THREE=null;
   const UM=44.45, PX=96, PANEL=482.6, CHW=430, BASE=120, CASEW=578, WALLX=280, EAR=0.056;
   const PORT_SZ={xlr:[.42,.42],ecn:[.42,.42],spk:[.42,.42],rj45:[.27,.22],bnc:[.23,.23],sfp:[.36,.14],lc:[.2,.28],iec:[.44,.3],pcon:[.44,.44],hdmi:[.3,.12],out:[.55,.55],brk:[.22,.4],slot:[.7,.08],fan:[.78,.78],knob:[.3,.3],btn:[.2,.16],led:[.08,.08],pwr:[.24,.34],usb:[.2,.09],jack:[.13,.13],bay:[3.2,.8],hdd:[1.8,.6],pcie:[.16,.82],us:[.4,.55],dc:[.17,.17]};
-  const OBJ_SZ={router:[2.6,.5],modem:[.62,1.55],mini:[1.1,.42],console:[2.7,.65],box:[2.2,.7],pi:[.95,.62],ps5:[4.6,2.3],ps4:[5,.85],hnas:[3.4,3.5],hnas2:[1.9,3.5],stream:[1.2,.36]};
-  const OBJ_COL={router:0xe3e6e8,modem:0xdadde0,mini:0x2c3135,console:0x17191c,box:0x41484e,pi:0x2e7d4f,ps5:0xeef0f1,ps4:0x1c1f23,hnas:0x2b3035,hnas2:0x2b3035,stream:0x141618};
-  const OBJ_DEPTH={router:180,modem:170,mini:110,console:260,box:200,pi:70,ps5:260,ps4:300,hnas:220,hnas2:220,stream:90};
+  const OBJ_SZ={macmini:[4.4,.8],studio:[4.4,2.1],tower:[6.8,3.4],dock:[3.9,2.3],router:[2.6,.5],modem:[.62,1.55],mini:[1.1,.42],console:[2.7,.65],box:[2.2,.7],pi:[.95,.62],ps5:[4.6,2.3],ps4:[5,.85],hnas:[3.4,3.5],hnas2:[1.9,3.5],stream:[1.2,.36]};
+  const OBJ_COL={macmini:0xd2d6d9,studio:0xd2d6d9,tower:0x141517,dock:0x1b1c1f,router:0xe3e6e8,modem:0xdadde0,mini:0x2c3135,console:0x17191c,box:0x41484e,pi:0x2e7d4f,ps5:0xeef0f1,ps4:0x1c1f23,hnas:0x2b3035,hnas2:0x2b3035,stream:0x141618};
+  const OBJ_DEPTH={macmini:197,studio:197,tower:151,dock:60,router:180,modem:170,mini:110,console:260,box:200,pi:70,ps5:260,ps4:300,hnas:220,hnas2:220,stream:90};
   const FACE_BG={black:['#2c3136','#1d2125'],grey:['#58606a','#444b53'],silver:['#dde1e4','#bfc5ca']};
   const CH_BG={black:['#30363c','#24292e'],grey:['#4a525a','#3a4047'],silver:['#b9bfc4','#a9b0b6']};
   const INK={black:'#d6dbe0',grey:'#e6e9ec',silver:'#23282c'};
@@ -1386,6 +1402,9 @@ const T3=(()=>{
       case 'ps4':glow('#f2f2f2',()=>circ(g,W*.06,H*.47,.05*s,'#f2f2f2'));glow('#3d7bff',()=>g.fillRect(W*.2,H*.45,W*.6,H*.06));break;
       case 'hnas':case 'hnas2':glow('#33d17a',()=>{for(let y=H*.07;y<H*.17;y+=.14*s)g.fillRect(W*.12,y,.08*s,.07*s)});break;
       case 'stream':glow('#ffffff',()=>circ(g,W*.88,H*.42,.04*s,'#ffffff'));break;
+      case 'macmini':case 'studio':glow('#ffffff',()=>circ(g,W*.9,H*(k==='studio'?.82:.55),.035*s,'#ffffff'));break;
+      case 'tower':glow('#ffffff',()=>circ(g,W*.07,H*.2,.07*s,'#f2f2f2'));break;
+      case 'dock':glow('#e60012',()=>g.fillRect(W*.06,H*.88,W*.1,.04*s));break;
     }
     objCache.set(key,c);return c;
   }
@@ -1404,6 +1423,9 @@ const T3=(()=>{
       case 'ps4':g.fillStyle=lg('#2a2d31','#22252a');rr(g,0,0,W,H,.14*s);g.fill();g.fillStyle='#0d0e10';g.fillRect(0,H*.45,W,H*.1);circ(g,W*.06,H*.47,.04*s,'#f2f2f2');break;
       case 'hnas':case 'hnas2':{g.fillStyle=lg('#3b4147','#24282c');rr(g,0,0,W,H,.12*s);g.fill();const n=k==='hnas'?4:2,bw=(W*.82)/n;for(let i=0;i<n;i++){g.fillStyle='#2f353b';g.fillRect(W*.09+i*bw+2,H*.2,bw-6,H*.72);g.fillStyle='#0f1113';g.fillRect(W*.09+i*bw+bw-6,H*.2,4,H*.72)}g.fillStyle='#33d17a';for(let y=H*.07;y<H*.17;y+=.14*s)g.fillRect(W*.12,y,.08*s,.07*s);break}
       case 'stream':g.fillStyle=lg('#24272b','#0d0e10');rr(g,0,0,W,H,.1*s);g.fill();circ(g,W*.88,H*.42,.03*s,'#fff');break;
+      case 'macmini':case 'studio':g.fillStyle=lg('#eceef0','#c3c8cc');rr(g,0,0,W,H,.16*s);g.fill();if(k==='studio'){g.fillStyle='#1d2024';[.12,.2].forEach(f=>{rr(g,W*f,H*.72,.16*s,.08*s,.03*s);g.fill()});g.fillStyle='#2a2d31';g.fillRect(W*.34,H*.72,.32*s,.06*s)}circ(g,W*.9,H*(k==='studio'?.82:.55),.03*s,'#f4f4f4');break;
+      case 'tower':g.fillStyle=lg('#1d1f22','#0b0c0d');rr(g,0,0,W,H,.1*s);g.fill();g.fillStyle='#050506';g.fillRect(W*.2,H*.18,W*.6,.05*s);circ(g,W*.07,H*.2,.08*s,'#2a2c30');g.fillStyle='#2a2c30';rr(g,W*.04,H*.75,.4*s,.1*s,.03*s);g.fill();break;
+      case 'dock':g.fillStyle=lg('#26282b','#121315');rr(g,0,0,W,H,.12*s);g.fill();g.fillStyle='#e60012';g.fillRect(W*.06,H*.88,W*.1,.03*s);g.fillStyle='#3a3d41';g.fillRect(W*.1,H*.06,W*.8,.05*s);break;
     }
     objCache.set(k,c);return c;
   }
@@ -1770,9 +1792,9 @@ const T3=(()=>{
     w.querySelectorAll('[data-t3light]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.t3light===(t.light||'room'))));
     w.querySelectorAll('[data-t3strip]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.t3strip===(t.strip||'off'))));const sb=w.querySelector('[data-t3sound]');if(sb)sb.setAttribute('aria-pressed',String(!!AUD.on));
     const help=w.querySelector('.t3-help');
-    if(help)help.textContent=state.mode==='wire'?(R.wireFrom?`From ${endName(R.wireFrom)} · now tap the port to connect it to · Esc cancels`:'Wire mode · Tap a port, then tap another port to connect them · Tap a cable to edit it')
+    const helpTxt=state.mode==='wire'?(R.wireFrom?`From ${endName(R.wireFrom)} · now tap the port to connect it to · Esc cancels`:'Wire mode · Tap a port, then tap another port to connect them · Tap a cable to edit it')
       :(matchMedia('(pointer:coarse)').matches?'Drag to turn · Pinch to zoom · Two fingers to pan · Tap a device to select it':'Drag to turn · Scroll to zoom · Right-drag to pan · Click a device to select it, then drag it up or down');
-    if(help&&help.textContent!==R.helpTxt){R.helpTxt=help.textContent;help.classList.add('show');clearTimeout(R.helpT);R.helpT=setTimeout(()=>help.classList.remove('show'),state.mode==='wire'?7000:4500)}
+    if(help&&helpTxt!==R.helpTxt){R.helpTxt=helpTxt;help.textContent=helpTxt;help.classList.add('show');clearTimeout(R.helpT);R.helpT=setTimeout(()=>help.classList.remove('show'),state.mode==='wire'?7000:4500)}
   }
 
   function animate(dt,now){
