@@ -15,7 +15,7 @@ img{max-width:100%}
   --case:#24282d; --case-edge:#8e979f; --bay:#101215; --rail:#5c646c; --hole:#0a0b0d;
   --face-black:#1f2327; --face-grey:#474e56; --face-silver:#c3c9ce; --face-ink:#d6dbe0; --face-ink-dark:#23282c;
   --port:#0b0c0e; --port-ring:#7f8891;
-  --c-audio:#3b6fd1; --c-video:#8a4fd0; --c-light:#c98a0b; --c-net:#1f9065; --c-power:#cf3f35; --c-util:#6b7580; --c-home:#0e8a83; --c-mine:#c2417a;
+  --c-audio:#3b6fd1; --c-video:#8a4fd0; --c-light:#c98a0b; --c-net:#1f9065; --c-power:#cf3f35; --c-util:#6b7580; --c-home:#0e8a83; --c-mine:#c2417a; --c-compute:#4f5bd5; --c-secur:#b5454f;
   --f-display:"Barlow Condensed","Arial Narrow",sans-serif;
   --f-body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
   --f-mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
@@ -26,14 +26,14 @@ img{max-width:100%}
   --accent:#ff7b33; --accent-ink:#1a0d04; --accent-soft:#3a2416;
   --ok:#47c07c; --warn:#e0a53e; --bad:#f06262;
   --case:#2b3036; --case-edge:#6a737b;
-  --c-audio:#6e9cf0; --c-video:#b083ee; --c-light:#e8ac35; --c-net:#4cc494; --c-power:#f0716a; --c-util:#98a3ad; --c-home:#3ccbc2; --c-mine:#ec7aa9;
+  --c-audio:#6e9cf0; --c-video:#b083ee; --c-light:#e8ac35; --c-net:#4cc494; --c-power:#f0716a; --c-util:#98a3ad; --c-home:#3ccbc2; --c-mine:#ec7aa9; --c-compute:#8f99ff; --c-secur:#ff7f88;
   color-scheme:dark}}
 :root[data-theme="dark"]{
   --bg:#14171a; --panel:#1c2024; --panel-2:#22272c; --ink:#e6eaee; --muted:#93a0ab; --line:#30373e;
   --accent:#ff7b33; --accent-ink:#1a0d04; --accent-soft:#3a2416;
   --ok:#47c07c; --warn:#e0a53e; --bad:#f06262;
   --case:#2b3036; --case-edge:#6a737b;
-  --c-audio:#6e9cf0; --c-video:#b083ee; --c-light:#e8ac35; --c-net:#4cc494; --c-power:#f0716a; --c-util:#98a3ad; --c-home:#3ccbc2; --c-mine:#ec7aa9;
+  --c-audio:#6e9cf0; --c-video:#b083ee; --c-light:#e8ac35; --c-net:#4cc494; --c-power:#f0716a; --c-util:#98a3ad; --c-home:#3ccbc2; --c-mine:#ec7aa9; --c-compute:#8f99ff; --c-secur:#ff7f88;
   color-scheme:dark}
 
 html,body{height:100%}
@@ -161,6 +161,14 @@ button,input,select,textarea{font:inherit;color:inherit}
 .o-hnas b,.o-hnas2 b{left:9%;right:9%;top:20%;bottom:8%;background:repeating-linear-gradient(90deg,#2f353b 0 calc(var(--u)*.62),#0f1113 calc(var(--u)*.62) calc(var(--u)*.72))}
 .o-hnas::before,.o-hnas2::before{content:"";position:absolute;left:12%;top:7%;width:calc(var(--u)*.08);height:calc(var(--u)*.4);background:repeating-linear-gradient(180deg,#33d17a 0 calc(var(--u)*.07),transparent calc(var(--u)*.07) calc(var(--u)*.14))}
 .o-stream{width:calc(var(--u)*1.2);height:calc(var(--u)*.36);border-radius:calc(var(--u)*.1);background:linear-gradient(180deg,#24272b,#0d0e10)}
+.o-macmini,.o-studio{width:calc(var(--u)*4.4);height:calc(var(--u)*.8);border-radius:calc(var(--u)*.16);background:linear-gradient(180deg,#eceef0,#c3c8cc)}
+.o-studio{height:calc(var(--u)*2.1)}
+.o-macmini b,.o-studio b{right:8%;top:45%;width:calc(var(--u)*.07);height:calc(var(--u)*.07);border-radius:50%;background:#fff}
+.o-studio b{top:78%}
+.o-tower{width:calc(var(--u)*6.8);height:calc(var(--u)*3.4);border-radius:calc(var(--u)*.1);background:linear-gradient(180deg,#1d1f22,#0b0c0d)}
+.o-tower b{left:5%;top:15%;width:calc(var(--u)*.16);height:calc(var(--u)*.16);border-radius:50%;background:#f2f2f2;box-shadow:0 0 4px #fff}
+.o-dock{width:calc(var(--u)*3.9);height:calc(var(--u)*2.3);border-radius:calc(var(--u)*.12);background:linear-gradient(180deg,#26282b,#121315)}
+.o-dock b{left:6%;bottom:10%;width:10%;height:calc(var(--u)*.04);background:#e60012}
 .o-stream b{right:12%;top:40%;width:calc(var(--u)*.06);height:calc(var(--u)*.06);border-radius:50%;background:#fff}
 .ghost.warn{border-color:var(--warn);background:color-mix(in srgb,var(--warn) 22%,transparent)}
 .modebar{display:inline-flex}
@@ -741,4 +749,29 @@ td.n{font-family:var(--f-num)}
   #views #viewMore{display:inline-flex}
   .t3-bottom{top:58px;bottom:auto;left:10px;transform:none;width:calc(100% - 76px)}
   .t3-help{top:auto;bottom:14px;max-width:calc(100% - 28px)}
+}
+
+/* ---------- Arabic / right-to-left ---------- */
+:root{--f-ui:-apple-system,BlinkMacSystemFont,"SF Pro Text","SF Arabic","Helvetica Neue",system-ui,"Segoe UI",Roboto,"Noto Sans Arabic",Arial,sans-serif}
+:lang(ar) body,:lang(ar) body *{letter-spacing:0!important}
+:lang(ar) body{font-family:var(--f-ui)}
+[dir=rtl] .canvas .rackwrap,[dir=rtl] .sitepair,[dir=rtl] .mini,[dir=rtl] .pv,[dir=rtl] .bay,[dir=rtl] .case,[dir=rtl] .ruler,[dir=rtl] .sidelabels{direction:ltr}
+[dir=rtl] .libitem,[dir=rtl] .tpl,[dir=rtl] .grp,[dir=rtl] .pop.menu button,[dir=rtl] .group .row,[dir=rtl] th{text-align:right}
+[dir=rtl] .kv dd{text-align:left}
+[dir=rtl] .search{padding:8px 34px 8px 12px;background-position:calc(100% - 10px) 50%}
+[dir=rtl] .seg button+button::before{left:auto;right:0}
+[dir=rtl] .t3-top{left:auto;right:12px}
+[dir=rtl] .t3-side{right:auto;left:12px}
+[dir=rtl] .pop{transform-origin:top left}
+[dir=rtl] .pop:not(.menu){transform-origin:left center}
+[dir=rtl] .tips,[dir=rtl] .callout ol,[dir=rtl] .plist{padding-left:0;padding-right:18px}
+[dir=rtl] .ear .handle,[dir=rtl] .unums{direction:ltr}
+#langBtn:lang(en),#langBtn{font-family:var(--f-ui)}
+.rowval{color:var(--muted)}
+@media (max-width:760px){
+  [dir=rtl] #selbar:not([hidden]){padding:8px 16px 8px 8px}
+  [dir=rtl] .t3-top{left:auto;right:10px}
+  [dir=rtl] .t3-side{right:auto;left:10px}
+  [dir=rtl] .t3-bottom{left:auto;right:10px}
+  [dir=rtl] .sheethead .textbtn{justify-self:start}
 }

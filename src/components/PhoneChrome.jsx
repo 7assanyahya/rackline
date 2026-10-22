@@ -1,4 +1,5 @@
 import Icon from './Icon.jsx';
+import { getLang, setLang } from '../i18n.js';
 
 const MORE = [
   { proxy: '#tapeToggle', label: 'Show or hide labels' },
@@ -40,6 +41,9 @@ export default function PhoneChrome() {
               <label htmlFor="pz">Rack size</label>
               <input type="range" id="pz" min="0.6" max="3" step="0.1" defaultValue="1" />
             </div>
+            <button className="row rowbtn" onClick={() => setLang(getLang() === 'ar' ? 'en' : 'ar')}>
+              <span>Language</span><span className="rowval" data-notr="">{getLang() === 'ar' ? 'English' : 'العربية'}</span>
+            </button>
             <div className="row">
               <label>Units</label>
               <div className="seg" role="group"><button data-sys="metric">Metric</button><button data-sys="us">US</button></div>

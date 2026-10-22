@@ -1,5 +1,6 @@
 import Logo from './Logo.jsx';
 import Icon from './Icon.jsx';
+import { getLang, setLang } from '../i18n.js';
 
 const VIEWS = [
   { id: 'front', label: 'Front' },
@@ -62,6 +63,8 @@ export default function TopBar() {
       </div>
       <div className="tools">
         <label className="zoom" htmlFor="zoom">Scale <input type="range" id="zoom" min="300" max="700" step="10" /></label>
+        <button className="btn" id="langBtn" data-notr="" lang={getLang() === 'ar' ? 'en' : 'ar'} onClick={() => setLang(getLang() === 'ar' ? 'en' : 'ar')}
+          title={getLang() === 'ar' ? 'Switch to English' : 'التبديل إلى العربية'}>{getLang() === 'ar' ? 'English' : 'العربية'}</button>
         {TOOLS.map((t) => (
           <button key={t.id} id={t.id} className={'btn' + (t.primary ? ' primary' : '')} title={t.title}
             aria-label={t.aria} aria-pressed={t.pressed ? 'true' : undefined}>{t.label}</button>
