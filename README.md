@@ -34,7 +34,8 @@ It's a React app built with Vite. There's no server or account: everything runs 
 - Labels, label colours and groups, and you can highlight a group to find its devices.
 - The **Report** lists every device, patch port and cable, and copies to plain text.
 - Undo and redo, starter templates, and backup or restore of your project as JSON.
-- Works on phones: a bottom menu, slide-up panels, and touch-and-hold to drag.
+- Designed in Apple's style: system font and colours, frosted-glass bars, iOS segmented controls, grouped lists, sheets and line icons, in light and dark mode.
+- Works on phones: a View menu, a bottom toolbar, slide-up sheets, a floating selection bar, and touch-and-hold to drag. The 3D view has floating glass controls and a Lighting popover.
 
 ## Starter templates
 
@@ -74,7 +75,8 @@ index.html              Page entry: meta tags, icons, fonts
 public/                 App icon (SVG + PNG sizes), web app manifest
 src/main.jsx            Mounts React
 src/App.jsx             App layout
-src/components/         TopBar, Library, Stage, Inspector, PhoneChrome, Logo
+src/components/         TopBar, Library, Stage, Inspector, PhoneChrome, Logo, Icon
+src/icons.js            Line icons (SF Symbols style) shared by React and the engine
 src/engine/rackline.js  Rack engine: devices, cables, 2D views, three.js 3D view
 src/styles.css          Styles, light and dark themes, phone layout
 ```
