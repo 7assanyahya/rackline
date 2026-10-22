@@ -1,45 +1,68 @@
+import Icon from './Icon.jsx';
+
 const MORE = [
   { proxy: '#tapeToggle', label: 'Show or hide labels' },
   { proxy: '#cableToggle', label: 'Show or hide cables' },
   { proxy: '#autoBtn', label: 'Auto manage cables' },
-  { proxy: '#redo', label: '↷ Redo' },
-  { proxy: '#newBtn', label: 'New project', primary: true },
   { proxy: '#dataBtn', label: 'Backup or restore' },
   { proxy: '#helpBtn', label: 'Help & tips' },
 ];
 const NAV = [
-  { sheet: 'lib', icon: '＋', label: 'Add' },
-  { sheet: 'insp', icon: '☰', label: 'Details', id: 'bnDetails' },
-  { proxy: '#undo', icon: '↶', label: 'Undo' },
-  { sheet: 'more', icon: '⋯', label: 'More' },
+  { sheet: 'lib', icon: 'plusCircle', label: 'Add' },
+  { sheet: 'insp', icon: 'sliders', label: 'Details', id: 'bnDetails' },
+  { proxy: '#undo', icon: 'undo', label: 'Undo' },
+  { proxy: '#redo', icon: 'redo', label: 'Redo' },
+  { sheet: 'more', icon: 'ellipsis', label: 'More' },
+];
+const MORE_VIEWS = [
+  { id: 'both', label: 'Front and back', icon: 'rack' },
+  { id: 'side', label: 'Side', icon: 'rack' },
+  { id: 'site', label: 'Whole site', icon: 'rack' },
+  { id: 'report', label: 'Report', icon: 'sliders' },
 ];
 
-/* Phone-only pieces: the "More" sheet, selection bar and bottom menu. */
+/* Phone-only pieces: the View menu, the "More" sheet, selection bar and bottom toolbar. */
 export default function PhoneChrome() {
   return (
     <>
+      <div className="pop menu" id="viewMenu" role="menu" aria-label="More views">
+        {MORE_VIEWS.map((v) => (
+          <button key={v.id} role="menuitemradio" data-view={v.id}>
+            <Icon name="check" className="ico chk" /><span>{v.label}</span>
+          </button>
+        ))}
+      </div>
       <div className="sheet" id="moreSheet" aria-label="More options">
-        <div className="sheethead"><b>More</b><button className="btn" data-closesheet="">Done</button></div>
+        <div className="sheethead"><span /><b>More</b><button className="textbtn" data-closesheet="">Done</button></div>
         <div className="more-list">
-          <div className="fld">
-            <label htmlFor="pz">Rack size on screen</label>
-            <input type="range" id="pz" min="0.6" max="3" step="0.1" defaultValue="1" style={{ accentColor: 'var(--accent)' }} />
+          <div className="group">
+            <div className="row">
+              <label htmlFor="pz">Rack size</label>
+              <input type="range" id="pz" min="0.6" max="3" step="0.1" defaultValue="1" />
+            </div>
+            <div className="row">
+              <label>Units</label>
+              <div className="seg" role="group"><button data-sys="metric">Metric</button><button data-sys="us">US</button></div>
+            </div>
           </div>
-          <div className="fld">
-            <label>Units</label>
-            <div className="seg" role="group"><button data-sys="metric">Metric</button><button data-sys="us">US</button></div>
+          <div className="group">
+            {MORE.map((m) => <button key={m.proxy} className="row rowbtn" data-proxy={m.proxy}>{m.label}</button>)}
           </div>
-          {MORE.map((m) => <button key={m.proxy} className={'btn' + (m.primary ? ' primary' : '')} data-proxy={m.proxy}>{m.label}</button>)}
+          <div className="group">
+            <button className="row rowbtn tint" data-proxy="#newBtn">New project</button>
+          </div>
         </div>
       </div>
       <div id="sheetBack" data-closesheet="" hidden />
       <div id="selbar" hidden />
-      <nav className="bnav" aria-label="Phone menu">
+      <nav className="bnav" aria-label="Toolbar">
         {NAV.map((n) => (
-          <button key={n.label} id={n.id} data-sheet={n.sheet} data-proxy={n.proxy}><i>{n.icon}</i>{n.label}</button>
+          <button key={n.label} id={n.id} data-sheet={n.sheet} data-proxy={n.proxy}>
+            <Icon name={n.icon} /><span>{n.label}</span>
+          </button>
         ))}
       </nav>
-      <button className="fab" id="fab">＋ Add device</button>
+      <button className="fab" id="fab"><Icon name="plus" className="ico sm" /> Add device</button>
     </>
   );
 }

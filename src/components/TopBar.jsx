@@ -1,13 +1,14 @@
 import Logo from './Logo.jsx';
+import Icon from './Icon.jsx';
 
 const VIEWS = [
   { id: 'front', label: 'Front' },
   { id: 'rear', label: 'Rear' },
-  { id: 'both', label: 'Both', title: 'Front and rear side by side, to wire between them' },
-  { id: 'side', label: 'Side' },
-  { id: 'site', label: 'Site', title: 'Every rack together, with the cables between them' },
+  { id: 'both', label: 'Both', title: 'Front and rear side by side, to wire between them', more: true },
+  { id: 'side', label: 'Side', more: true },
+  { id: 'site', label: 'Site', title: 'Every rack together, with the cables between them', more: true },
   { id: '3d', label: '3D', title: 'Turn the rack around in 3D' },
-  { id: 'report', label: 'Report' },
+  { id: 'report', label: 'Report', more: true },
 ];
 const MODES = [
   { id: 'arrange', label: 'Arrange', title: "Devices snap to free slots and can't overlap" },
@@ -39,10 +40,11 @@ export default function TopBar() {
         <span>Rackline</span>
       </div>
       <div className="proj"><input id="projName" aria-label="Project name" /></div>
-      <button className="btn" id="moreBtn" data-sheet="more" aria-label="More options">⋯</button>
+      <button className="iconbtn" id="moreBtn" data-sheet="more" aria-label="More options"><Icon name="ellipsis" /></button>
       <div className="strip">
         <div className="seg" role="group" aria-label="View" id="views">
-          {VIEWS.map((v) => <button key={v.id} data-view={v.id} title={v.title}>{v.label}</button>)}
+          {VIEWS.map((v) => <button key={v.id} data-view={v.id} title={v.title} className={v.more ? 'vx' : undefined}>{v.label}</button>)}
+          <button id="viewMore" className="phoneonly" data-pop="viewMenu" aria-haspopup="menu"><span id="viewMoreLbl">More</span><Icon name="chevronDown" className="ico sm" /></button>
         </div>
         <div className="seg modebar" role="group" aria-label="Mode" id="modes">
           {MODES.map((m) => <button key={m.id} data-mode={m.id} title={m.title}>{m.label}</button>)}
@@ -54,8 +56,8 @@ export default function TopBar() {
           </div>
         </div>
         <div className="seg phoneonly" role="group" aria-label="Zoom" id="zoomSeg">
-          <button data-zoomstep="-1" aria-label="Zoom out">−</button>
-          <button data-zoomstep="1" aria-label="Zoom in">＋</button>
+          <button data-zoomstep="-1" aria-label="Zoom out"><Icon name="minus" className="ico sm" /></button>
+          <button data-zoomstep="1" aria-label="Zoom in"><Icon name="plus" className="ico sm" /></button>
         </div>
       </div>
       <div className="tools">

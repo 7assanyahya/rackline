@@ -3,6 +3,8 @@
   three.js 3D view. React renders the page shell (see src/components), then
   App calls mountRackline() once to bring it to life.
 */
+import { svgIcon as I } from '../icons.js';
+
 let mounted = false;
 
 export function mountRackline() {
@@ -700,7 +702,9 @@ function renderStage(){
   }
   if(v==='site')c.querySelectorAll(`.bay[data-rack="${r.id}"]`).forEach(b=>b.closest('.case').classList.add('activecase'));
   if(rackView) c.insertAdjacentHTML('beforeend','<svg class="cables wires" aria-label="Cables"></svg>');
-  document.querySelectorAll('#views button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.view===v));
+  document.querySelectorAll('[data-view]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.view===v));
+  {const OV={both:'Front + back',side:'Side',site:'Site',report:'Report'},lb=$('#viewMoreLbl'),vm=$('#viewMore');if(lb)lb.textContent=OV[v]||'More';if(vm)vm.setAttribute('aria-pressed',String(!!OV[v]))}
+  document.body.classList.toggle('is3dview',v==='3d');
   document.querySelectorAll('#modes button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.mode===state.mode));
   $('#snapWrap').hidden=state.mode!=='free';
   const sn=+(state.snap??(1/3));
@@ -803,8 +807,8 @@ function openSheet(name){closeSheets();const el=name==='lib'?$('#libSheet'):name
   if(name==='more'){$('#pz').value=state.pzoom||1;document.querySelectorAll('#moreSheet [data-sys]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.sys===state.sys))}}
 function closeSheets(){document.querySelectorAll('.sheet.open').forEach(x=>x.classList.remove('open'));const b=$('#sheetBack');if(b)b.hidden=true}
 function renderSelbar(){const b=$('#selbar');if(!b)return;const f=ui.sel&&findItem(ui.sel),c=findCable(ui.selCable);
-  if(f){b.innerHTML=`<div class="sb-t"><b>${esc(label(f.it))}</b><span>${uRange(f.it)} · ${esc(f.r.name)}</span></div><button class="btn" data-act="down" aria-label="Move down">▼</button><button class="btn" data-act="up" aria-label="Move up">▲</button><button class="btn primary" data-sheet="insp">Edit</button><button class="btn" data-act="desel" aria-label="Deselect">✕</button>`;b.hidden=false}
-  else if(c){const ci=cableInfo(c);b.innerHTML=`<div class="sb-t"><b>${esc(c.label||ci.T.n)}</b><span>${esc(endName(c.a))} → ${esc(endName(c.b))}</span></div><button class="btn primary" data-sheet="insp">Edit</button><button class="btn danger" data-act="cableDel">Unplug</button><button class="btn" data-act="cableDone" aria-label="Deselect">✕</button>`;b.hidden=false}
+  if(f){b.innerHTML=`<div class="sb-t"><b>${esc(label(f.it))}</b><span>${uRange(f.it)} · ${esc(f.r.name)}</span></div><button class="cbtn" data-act="down" aria-label="Move down">${I('chevronDown')}</button><button class="cbtn" data-act="up" aria-label="Move up">${I('chevronUp')}</button><button class="pill" data-sheet="insp">Edit</button><button class="cbtn" data-act="desel" aria-label="Deselect">${I('xmark')}</button>`;b.hidden=false}
+  else if(c){const ci=cableInfo(c);b.innerHTML=`<div class="sb-t"><b>${esc(c.label||ci.T.n)}</b><span>${esc(endName(c.a))} → ${esc(endName(c.b))}</span></div><button class="cbtn danger" data-act="cableDel" aria-label="Unplug cable">${I('unplug')}</button><button class="pill" data-sheet="insp">Edit</button><button class="cbtn" data-act="cableDone" aria-label="Deselect">${I('xmark')}</button>`;b.hidden=false}
   else b.hidden=true;
   const d=$('#bnDetails');if(d)d.classList.toggle('hot',!!(f||c));}
 let tt;function toast(m,withUndo){const t=$('#toast');t.innerHTML=esc(m)+(withUndo?'<button type="button" data-act="toastUndo">Undo</button>':'');t.hidden=false;clearTimeout(tt);tt=setTimeout(()=>t.hidden=true,withUndo?5000:2600)}
@@ -864,8 +868,24 @@ function colourByType(){
 }
 function loosenAll(){const cs=scopeCables();if(!cs.length)return;snap();cs.forEach(c=>{c.route=null;c.bend=null});save();renderStage();renderInsp();toast('All cables set back to loose curves',true)}
 function delCable(){if(!ui.selCable)return;snap();removeCable(ui.selCable);ui.selCable=null;save();renderStage();renderInsp();toast('Cable unplugged',true)}
+function closePops(){document.querySelectorAll('.pop.open').forEach(p=>p.classList.remove('open'));document.querySelectorAll('[data-pop][aria-expanded="true"]').forEach(b=>b.setAttribute('aria-expanded','false'))}
+function placePop(el,anchor){
+  const a=anchor.getBoundingClientRect(),vw=document.documentElement.clientWidth,vh=window.innerHeight,m=10;
+  el.style.left='0px';el.style.top='0px';const w=el.offsetWidth,h=el.offsetHeight;
+  let x,y;
+  if(anchor.closest('.t3-side')){x=a.left-w-10;y=a.top+a.height/2-h/2}
+  else{x=a.right-w;y=a.bottom+8;if(x<m)x=a.left}
+  x=Math.max(m,Math.min(vw-w-m,x));y=Math.max(m,Math.min(vh-h-m,y));
+  el.style.left=x+'px';el.style.top=y+'px';
+}
+window.addEventListener('resize',closePops);
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closePops()});
 document.addEventListener('click',e=>{
   if(suppressClick){suppressClick=false;return}
+  const popBtn=e.target.closest&&e.target.closest('[data-pop]');
+  if(popBtn){const el=document.getElementById(popBtn.dataset.pop),was=el&&el.classList.contains('open');closePops();if(el&&!was){el.classList.add('open');popBtn.setAttribute('aria-expanded','true');placePop(el,popBtn)}return}
+  const inPop=e.target.closest&&e.target.closest('.pop');
+  if(!inPop||(inPop.classList.contains('menu')&&e.target.closest('button')))closePops();
   const sh=e.target.closest&&e.target.closest('[data-sheet],[data-closesheet],[data-proxy],[data-zoomstep]');
   if(sh){
     if(sh.dataset.sheet){openSheet(sh.dataset.sheet)}
@@ -1132,8 +1152,8 @@ function shell(title,body,foot){
   return close;
 }
 function openWelcome(first){
-  const close=shell(first?'Welcome to Rackline. What are you building?':'Start a new project',
-   `<p class="sub" style="margin:0">${first?'Pick a starting point. Everything is editable, and your work saves in this browser automatically.':'Pick a starting point. Your current project is replaced, and Undo brings it back.'}</p>
+  const close=shell(first?'Welcome to Rackline':'Start a new project',
+   `${first?'<img class="wl-icon" src="/apple-touch-icon.png" alt="" width="72" height="72">':''}<p class="sub" style="margin:0">${first?'What are you building? ':''}${first?'Pick a starting point. Everything is editable, and your work saves in this browser automatically.':'Pick a starting point. Your current project is replaced, and Undo brings it back.'}</p>
     <div class="tpl-grid">
       <button class="tpl" data-tpl="home"><em>16U · DIY</em><b>Home lab</b><span>PC, NAS, modem + Wi-Fi router shelf, Raspberry Pis, switch, wall-jack patch panel, UPS.</span></button>
       <button class="tpl" data-tpl="gaming"><em>18U · DIY · wired</em><b>Gaming &amp; media</b><span>PS5, PS4, home NAS, HDMI switch, Wi-Fi router and power, with network, HDMI and power cables run.</span></button>
@@ -1526,16 +1546,25 @@ const T3=(()=>{
   }
   function shellHTML(){return `<div class="t3wrap" id="t3wrap">
     <div class="t3-msg"><span>Loading 3D…</span></div>
-    <div class="t3-ui">
-      <div class="seg" role="group" aria-label="What to show"><button data-t3site="0">This rack</button><button data-t3site="1">Whole site</button></div>
-      <div class="seg" role="group" aria-label="Camera"><button data-t3cam="34" title="Angled view">Angle</button><button data-t3cam="front">Front</button><button data-t3cam="back">Back</button><button data-t3cam="side">Side</button><button data-t3cam="top">Top</button></div>
-      <div class="seg" role="group" aria-label="Case sides"><button data-t3walls="glass" title="See-through case sides">Glass</button><button data-t3walls="solid" title="Solid case sides">Solid</button><button data-t3walls="off" title="No case sides">Open</button></div>
-      <button class="btn" data-t3spin aria-pressed="false">Spin</button>
-      <div class="seg" role="group" aria-label="Room lights"><button data-t3light="room" title="Normal room lighting">Lights on</button><button data-t3light="dim" title="Dark room: see LEDs, screens and LED strips glow">Dim</button></div>
-      <label class="t3sel" title="LED strip inside the rack"><span>LED strip</span><select data-t3strip aria-label="LED strip colour"><option value="off">Off</option><option value="white">White</option><option value="blue">Blue</option><option value="purple">Purple</option><option value="red">Red</option><option value="green">Green</option><option value="amber">Amber</option><option value="rainbow">Rainbow</option></select></label>
-      <button class="btn" data-t3sound aria-pressed="false" title="Play the sound of the fans in view">Fan sound</button>
+    <div class="t3-top"><div class="seg mat" role="group" aria-label="What to show"><button data-t3site="0">This rack</button><button data-t3site="1">Whole site</button></div></div>
+    <div class="t3-side" role="toolbar" aria-label="3D controls">
+      <button class="fbtn mat" data-t3cam="34" title="Fit to view" aria-label="Fit to view">${I('scope')}</button>
+      <button class="fbtn mat" data-pop="t3LightPop" title="Lighting" aria-label="Lighting" aria-haspopup="dialog">${I('lightbulb')}</button>
+      <button class="fbtn mat" data-t3spin title="Spin" aria-label="Spin" aria-pressed="false">${I('rotate')}</button>
+      <button class="fbtn mat" data-t3sound title="Fan sound" aria-label="Fan sound" aria-pressed="false">${I('speakerOff','ico off')}${I('speaker','ico on')}</button>
+      <button class="fbtn mat zoombtn" data-zoomstep="1" title="Zoom in" aria-label="Zoom in">${I('plus')}</button>
+      <button class="fbtn mat zoombtn" data-zoomstep="-1" title="Zoom out" aria-label="Zoom out">${I('minus')}</button>
     </div>
-    <div class="t3-tip" hidden></div><p class="t3-help"></p></div>`}
+    <div class="t3-bottom"><div class="seg mat" role="group" aria-label="Camera"><button data-t3cam="34">Angle</button><button data-t3cam="front">Front</button><button data-t3cam="back">Back</button><button data-t3cam="side">Side</button><button data-t3cam="top">Top</button></div></div>
+    <div class="pop mat" id="t3LightPop" role="dialog" aria-label="Lighting">
+      <p class="pop-h">Room</p>
+      <div class="seg" role="group" aria-label="Room lights"><button data-t3light="room">Lights on</button><button data-t3light="dim">Dim</button></div>
+      <p class="pop-h">LED strip</p>
+      <div class="swrow"><button class="swatch off" data-t3strip="off" style="--sw:transparent" aria-label="Off" title="Off"></button><button class="swatch" data-t3strip="white" style="--sw:#f4f1ea" aria-label="White" title="White"></button><button class="swatch" data-t3strip="blue" style="--sw:#3d7bff" aria-label="Blue" title="Blue"></button><button class="swatch" data-t3strip="purple" style="--sw:#a25bff" aria-label="Purple" title="Purple"></button><button class="swatch" data-t3strip="red" style="--sw:#ff3b3b" aria-label="Red" title="Red"></button><button class="swatch" data-t3strip="green" style="--sw:#2fe07a" aria-label="Green" title="Green"></button><button class="swatch" data-t3strip="amber" style="--sw:#ffa424" aria-label="Amber" title="Amber"></button><button class="swatch" data-t3strip="rainbow" style="--sw:conic-gradient(#ff3b3b,#ffa424,#ffe14d,#2fe07a,#3d7bff,#a25bff,#ff3b3b)" aria-label="Rainbow" title="Rainbow"></button></div>
+      <p class="pop-h">Case sides</p>
+      <div class="seg" role="group" aria-label="Case sides"><button data-t3walls="glass">Glass</button><button data-t3walls="solid">Solid</button><button data-t3walls="off">Open</button></div>
+    </div>
+    <div class="t3-tip" hidden></div><p class="t3-help" aria-live="polite"></p></div>`}
   function show(wrap){
     const msg=wrap.querySelector('.t3-msg');
     ensure().then(()=>{
@@ -1739,10 +1768,11 @@ const T3=(()=>{
     const sp=w.querySelector('[data-t3spin]');if(sp)sp.setAttribute('aria-pressed',String(!!t.spin));
     R.controls.autoRotate=!!t.spin;R.controls.autoRotateSpeed=1.1;
     w.querySelectorAll('[data-t3light]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.t3light===(t.light||'room'))));
-    const st=w.querySelector('[data-t3strip]');if(st)st.value=t.strip||'off';const sb=w.querySelector('[data-t3sound]');if(sb)sb.setAttribute('aria-pressed',String(!!AUD.on));
+    w.querySelectorAll('[data-t3strip]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.t3strip===(t.strip||'off'))));const sb=w.querySelector('[data-t3sound]');if(sb)sb.setAttribute('aria-pressed',String(!!AUD.on));
     const help=w.querySelector('.t3-help');
     if(help)help.textContent=state.mode==='wire'?(R.wireFrom?`From ${endName(R.wireFrom)} · now tap the port to connect it to · Esc cancels`:'Wire mode · Tap a port, then tap another port to connect them · Tap a cable to edit it')
-      :'Drag to turn · Scroll or pinch to zoom · Right-drag or two fingers to pan · Tap a device to select it, then drag it up or down';
+      :(matchMedia('(pointer:coarse)').matches?'Drag to turn · Pinch to zoom · Two fingers to pan · Tap a device to select it':'Drag to turn · Scroll to zoom · Right-drag to pan · Click a device to select it, then drag it up or down');
+    if(help&&help.textContent!==R.helpTxt){R.helpTxt=help.textContent;help.classList.add('show');clearTimeout(R.helpT);R.helpT=setTimeout(()=>help.classList.remove('show'),state.mode==='wire'?7000:4500)}
   }
 
   function animate(dt,now){
@@ -1911,6 +1941,7 @@ const T3=(()=>{
     else if(b.dataset.t3walls){t.walls=b.dataset.t3walls;save();build()}
     else if(b.hasAttribute('data-t3spin')){t.spin=!t.spin;save();uiSync()}
     else if(b.dataset.t3light){t.light=b.dataset.t3light;save();build()}
+    else if(b.dataset.t3strip){t.strip=b.dataset.t3strip;save();build();if(t.strip!=='off'&&t.light!=='dim')toast('Switch the room to Dim to see the LED strip glow.')}
     else if(b.hasAttribute('data-t3sound')){if(AUD.on)soundOff();else soundOn();uiSync()}
   }
   function zoom(step){if(!R||!R.wrap)return;const c=R.camera,t=R.controls.target,d=c.position.clone().sub(t),k=step>0?.8:1.25,len=Math.max(R.controls.minDistance,Math.min(R.controls.maxDistance,d.length()*k));R.tween={p0:c.position.clone(),q0:t.clone(),p1:t.clone().addScaledVector(d.normalize(),len),q1:t.clone(),s:performance.now(),d:250}}
